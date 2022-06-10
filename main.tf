@@ -17,3 +17,24 @@ resource "aws_subnet" "learn-app-subnet" {
     Name = "${var.environment}-learn-app-subnet"
   }
 }
+
+resource "aws_internet_gateway" "learn-app-internet-gateway" {
+  vpc_id = aws_vpc.learn-app-vpc.id
+
+  tags = {
+    Name = "${var.environment}-learn-app-internet-gateway"
+  }
+}
+
+resource "aws_route_table" "learn-app-route-table" {
+  vpc_id = aws_vpc.learn-app-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.learn-app-internet-gateway.id
+  }
+
+  tags = {
+    Name = "${var.environment}-learn-app-route-table"
+  }
+}
