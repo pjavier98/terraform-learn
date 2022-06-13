@@ -38,3 +38,8 @@ resource "aws_route_table" "learn-app-route-table" {
     Name = "${var.environment}-learn-app-route-table"
   }
 }
+
+resource "aws_route_table_association" "association-route-table-subnet" {
+  subnet_id      = aws_subnet.learn-app-subnet.id
+  route_table_id = aws_route_table.learn-app-route-table.id
+}
