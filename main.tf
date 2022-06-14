@@ -121,3 +121,9 @@ resource "aws_default_security_group" "learn-app-security-group" {
     Name = "${var.environment}-learn-app-security-group"
   }
 }
+
+# resource "aws_instance" "learn-app-server" {
+#   # Amazon Machine Image
+#   ami = data.aws_ami.lastest-amazon-linux-image.id
+
+# }
