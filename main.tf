@@ -19,57 +19,17 @@ module "app-subnet" {
   subnet_cidr_block = var.subnet_cidr_block
 }
 
-resource "aws_default_security_group" "security-group" {
+module "app-webserver" {
+  source = "./modules/webserver"
+
   vpc_id = aws_vpc.vpc.id
 
-  ingress {
-    description = "TLS from VPC"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.my_ip_address]
-  }
+  subnet_id = module.app-subnet.subnet.id
 
-  ingress {
-    description = "Browser from VPC"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-    prefix_list_ids = []
-  }
-
-  tags = {
-    Name = "${var.environment}-security-group"
-  }
-}
-
-resource "aws_key_pair" "ssh-key" {
-  key_name   = "server-key"
-  public_key = file(var.public_key_location)
-}
-
-resource "aws_instance" "webserver" {
-  ami           = data.aws_ami.lastest-amazon-linux-image.id
-  instance_type = var.server_instance_type
-
-  vpc_security_group_ids = [aws_default_security_group.security-group.id]
-  subnet_id              = module.app-subnet.subnet.id
-  availability_zone      = var.availability_zone
-
-  associate_public_ip_address = true
-  key_name                    = aws_key_pair.ssh-key.key_name
-
-  user_data = file("entry-script.sh")
-
-  tags = {
-    Name = "${var.environment}-webserver"
-  }
+  environment          = var.environment
+  availability_zone    = var.availability_zone
+  my_ip_address        = var.my_ip_address
+  image_name           = var.image_name
+  server_instance_type = var.server_instance_type
+  public_key_location  = var.public_key_location
 }

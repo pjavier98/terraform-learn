@@ -28,7 +28,14 @@ variable "server_instance_type" {
   type        = string
 }
 
+variable "image_name" {
+  description = "server image name"
+  type        = string
+}
+
 variable "public_key_location" {
   description = "public key location"
   type        = string
 }
+
+
