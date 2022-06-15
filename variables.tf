@@ -32,3 +32,8 @@ variable "public_key_location" {
   description = "public key location"
   type        = string
 }
+
+variable "private_key_location" {
+  description = "private key location"
+  type        = string
+}
