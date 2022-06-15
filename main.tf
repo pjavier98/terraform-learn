@@ -1,30 +1,28 @@
 provider "aws" {}
 
-resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr_block
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "my-vpc"
+  cidr = var.vpc_cidr_block
+
+  azs            = [var.availability_zone]
+  public_subnets = [var.subnet_cidr_block]
+
+  public_subnet_tags = {
+    Name = "${var.environment}-subnet"
+  }
 
   tags = {
     Name = "${var.environment}-vpc"
   }
 }
 
-module "app-subnet" {
-  source = "./modules/subnet"
-
-  vpc_id                 = aws_vpc.vpc.id
-  default_route_table_id = aws_vpc.vpc.default_route_table_id
-
-  environment       = var.environment
-  availability_zone = var.availability_zone
-  subnet_cidr_block = var.subnet_cidr_block
-}
-
 module "app-webserver" {
   source = "./modules/webserver"
 
-  vpc_id = aws_vpc.vpc.id
-
-  subnet_id = module.app-subnet.subnet.id
+  vpc_id    = module.vpc.vpc_id
+  subnet_id = module.vpc.public_subnets[0]
 
   environment          = var.environment
   availability_zone    = var.availability_zone

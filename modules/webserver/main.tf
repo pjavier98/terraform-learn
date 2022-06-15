@@ -1,5 +1,6 @@
-resource "aws_default_security_group" "security-group" {
+resource "aws_security_group" "security-group" {
   vpc_id = var.vpc_id
+  name   = "security-group"
 
   ingress {
     description = "TLS from VPC"
@@ -57,7 +58,7 @@ resource "aws_instance" "webserver" {
 
   subnet_id              = var.subnet_id
   availability_zone      = var.availability_zone
-  vpc_security_group_ids = [aws_default_security_group.security-group.id]
+  vpc_security_group_ids = [aws_security_group.security-group.id]
 
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.key_name
