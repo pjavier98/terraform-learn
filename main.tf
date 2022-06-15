@@ -4,7 +4,7 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr_block
 
   tags = {
-    Name = "${var.environment}-learn-app-vpc"
+    Name = "${var.environment}-vpc"
   }
 }
 
@@ -60,8 +60,8 @@ resource "aws_instance" "webserver" {
   ami           = data.aws_ami.lastest-amazon-linux-image.id
   instance_type = var.server_instance_type
 
-  subnet_id              = aws_subnet.learn-app-subnet.id
   vpc_security_group_ids = [aws_default_security_group.security-group.id]
+  subnet_id              = module.app-subnet.subnet.id
   availability_zone      = var.availability_zone
 
   associate_public_ip_address = true

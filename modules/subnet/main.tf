@@ -9,7 +9,7 @@ resource "aws_subnet" "subnet" {
 }
 
 resource "aws_internet_gateway" "internet-gateway" {
-  vpc_id = var.vpc.id
+  vpc_id = var.vpc_id
 
   tags = {
     Name = "${var.environment}-internet-gateway"
