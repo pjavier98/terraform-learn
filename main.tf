@@ -122,18 +122,23 @@ resource "aws_default_security_group" "learn-app-security-group" {
   }
 }
 
+resource "aws_key_pair" "ssh-key" {
+  key_name   = "server-key"
+  public_key = file(var.public_key_location)
+}
+
 resource "aws_instance" "learn-app-server" {
   ami           = data.aws_ami.lastest-amazon-linux-image.id
   instance_type = var.server_instance_type
 
   subnet_id              = aws_subnet.learn-app-subnet.id
-  vpc_security_group_ids = aws_default_security_group.learn-app-security-group.id
+  vpc_security_group_ids = [aws_default_security_group.learn-app-security-group.id]
   availability_zone      = var.availability_zone
 
   associate_public_ip_address = true
-  key_name                    = ""
+  key_name                    = aws_key_pair.ssh-key.key_name
 
-  tags {
+  tags = {
     Name = "${var.environment}-learn-app-server"
   }
 }

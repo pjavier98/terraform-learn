@@ -27,3 +27,8 @@ variable "server_instance_type" {
   description = "server instance type"
   type        = string
 }
+
+variable "public_key_location" {
+  description = "public key location"
+  type        = string
+}
