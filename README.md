@@ -18,3 +18,5 @@ terraform apply -var-file "terraform-staging.tfvars"
 ```
 terraform apply -var-file "terraform-production.tfvars"
 ```
+
+![terraform image](./doc/terraform.jpg)
