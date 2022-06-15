@@ -22,3 +22,8 @@ variable "my_ip_address" {
   description = "my ip address"
   type        = string
 }
+
+variable "server_instance_type" {
+  description = "server instance type"
+  type        = string
+}

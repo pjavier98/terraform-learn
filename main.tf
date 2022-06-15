@@ -122,8 +122,18 @@ resource "aws_default_security_group" "learn-app-security-group" {
   }
 }
 
-# resource "aws_instance" "learn-app-server" {
-#   # Amazon Machine Image
-#   ami = data.aws_ami.lastest-amazon-linux-image.id
+resource "aws_instance" "learn-app-server" {
+  ami           = data.aws_ami.lastest-amazon-linux-image.id
+  instance_type = var.server_instance_type
 
-# }
+  subnet_id              = aws_subnet.learn-app-subnet.id
+  vpc_security_group_ids = aws_default_security_group.learn-app-security-group.id
+  availability_zone      = var.availability_zone
+
+  associate_public_ip_address = true
+  key_name                    = ""
+
+  tags {
+    Name = "${var.environment}-learn-app-server"
+  }
+}
